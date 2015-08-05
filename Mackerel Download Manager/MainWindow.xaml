@@ -1,0 +1,387 @@
+﻿<Window x:Class="Mackerel_Download_Manager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:p="clr-namespace:Mackerel_Download_Manager.Properties"
+		xmlns:local="clr-namespace:Mackerel_Download_Manager"
+        xmlns:tb="http://www.hardcodet.net/taskbar"
+		xmlns:util="clr-namespace:Wpf.Util"
+		Activated="Window_Activated"
+        Title="Mackerel Download Manager" Height="Auto" Width="Auto">
+    <Window.CommandBindings>
+        <!--to be being able to delete selected downloads by using the delete key-->
+        <CommandBinding Command="{x:Static local:MainWindow.DeleteSelectedFilesCommand}" Executed="DeleteSelectedDownloads_Click" />
+        <CommandBinding Command="{x:Static local:MainWindow.TrayIconClick}" Executed="TrayIcon_Click" />
+    </Window.CommandBindings>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+				Width="Auto"
+				MinWidth="41" 
+                MaxWidth="700" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition
+				Height="Auto" />
+            <RowDefinition 
+				Height="Auto"/>
+            <RowDefinition
+				Height="*" />
+        </Grid.RowDefinitions>
+        <Menu
+            x:Name="Menu"
+            IsMainMenu="True"
+			Grid.Row="0"
+			Grid.ColumnSpan="3"
+            Height="24">
+            <MenuItem
+				Header="_Tasks">
+                <MenuItem
+					Header="_Add new download" 
+                    Click="AddURL_Click"/>
+                <Separator />
+                <MenuItem
+					Header="_Exit"
+					Click="ExitApplication"/>
+            </MenuItem>
+            <MenuItem
+                Header="_File">
+                <MenuItem
+					x:Name="StopSelectedDownloads_MenuItem"
+                    Header="_Stop" 
+                    Click="StopSelectedDownloads_Click" />
+                <MenuItem
+					x:Name="DeleteSelectedDownloads_MenuItem"
+                    Header="_Remove" 
+                    Click="DeleteSelectedDownloads_Click" />
+                <MenuItem
+					x:Name="ResumeSelectedDownloads_MenuItem"
+                    Header="_Resume"
+                    Click="ResumeSelectedDownloads_Click"/>
+            </MenuItem>
+            <MenuItem
+                    Header="_Downloads">
+                <MenuItem
+					x:Name="StopAllDownloads_MenuItem"
+                    Header="_Stop All" 
+                    Click="StopAllDownloads_Click" />
+                <Separator />
+                <MenuItem
+                    Header="_Delete All Completed"
+                    Click="DeleteCompletedDownloads_Click" />
+                <Separator />
+                <MenuItem
+                    Header="Start queue"
+                    Click="StartDefaultDownloadQueue_Click" />
+                <MenuItem
+                    Header="Stop queue"
+                    Click="StopDefaultDownloadQueue_Click" />
+				<Separator />
+				<MenuItem
+                    Header="Options"
+                    Click="MenuItemOptions_Click" />
+			</MenuItem>
+			<MenuItem
+                    Header="_Help">
+				<MenuItem
+                    Header="About Mackerel"
+					Click="MenuItemAboutMackerel_Click" />
+			</MenuItem>
+		</Menu>
+        <StackPanel
+			Grid.Row="1"
+			Grid.ColumnSpan="3"
+			Orientation="Horizontal"
+			Background="#F0F0F0">
+			<StackPanel.Resources>
+				<Style TargetType="Button">
+					<Setter Property="Margin" Value="10" />
+					<Setter Property="Background" Value="Transparent" />
+					<Setter Property="Padding" Value="3 2 3 2" />
+					<Setter Property="MinWidth" Value="60" />
+				</Style>
+				<Style TargetType="Image"> <!-- for greying out images inside buttons, when the buttons ar disabled -->
+					<Style.Triggers>
+						<Trigger Property="IsEnabled" Value="False">
+							<Setter Property="Opacity" Value="0.5" />
+						</Trigger>
+					</Style.Triggers>
+				</Style>
+				<Style TargetType="StackPanel">
+					<Setter Property="Orientation" Value="Vertical" />
+				</Style>
+				<Style TargetType="TextBlock">
+					<Setter Property="Margin" Value="0 2 0 0" />
+				</Style>
+			</StackPanel.Resources>
+            <Button
+				x:Name="AddURL"
+				Click="AddURL_Click">
+                <StackPanel>
+					<Image Source="Resources/Icons/MenuBar/add_download.png" />
+                    <TextBlock>Add URL</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button
+				x:Name="ResumeSelectedDownloads"
+				Click="ResumeSelectedDownloads_Click">
+                <StackPanel>
+					<Image Source="Resources/Icons/MenuBar/resume_download.png"  Width="16" Height="16" />
+                    <TextBlock>Resume</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button
+				x:Name="StopSelectedDownloads"
+				Click="StopSelectedDownloads_Click">
+                <StackPanel>
+					<Image Source="Resources/Icons/MenuBar/stop_download.png" Width="16" Height="16" />
+                    <TextBlock>Stop</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button
+				x:Name="StopAllDownloads"
+				Click="StopAllDownloads_Click">
+                <StackPanel>
+					<Image Source="Resources/Icons/MenuBar/stop_all_downloads.png" />
+                    <TextBlock>Stop All</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button
+				x:Name="DeleteSelectedDownloads"
+				Click="DeleteSelectedDownloads_Click">
+                <StackPanel>
+					<Image Source="Resources/Icons/MenuBar/delete.png" />
+                    <TextBlock>Delete</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button
+				x:Name="DeleteCompletedDownloads"
+				Click="DeleteCompletedDownloads_Click">
+                <StackPanel>
+					<Image Source="Resources/Icons/MenuBar/delete_completed.png" />
+                    <TextBlock>Delete Completed</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button
+				x:Name="StartDefaultDownloadQueue"
+				Click="StartDefaultDownloadQueue_Click">
+                <StackPanel>
+                    <TextBlock>Start Queue</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button
+				x:Name="StopDefaultDownloadQueue"
+				Click="StopDefaultDownloadQueue_Click">
+                <StackPanel>
+                    <TextBlock>Stop Queue</TextBlock>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <ScrollViewer
+			HorizontalScrollBarVisibility="Auto"
+			VerticalScrollBarVisibility="Auto"
+			Grid.Row="2"
+			Grid.Column="0">
+            <TreeView
+				BorderBrush="{x:Null}"
+				VerticalAlignment="Top"
+				HorizontalAlignment="Left"
+				Width="193">
+                <TreeView.Resources>
+					<Style TargetType="TextBlock">
+						<Setter Property="Margin" Value="5 2 0 2" />
+						<Setter Property="Padding" Value="0 0 3 0" />
+					</Style>
+					<Style TargetType="StackPanel">
+						<Setter Property="Orientation" Value="Horizontal" />
+					</Style>
+                </TreeView.Resources>
+                <TreeViewItem
+					Selected="DownloadList_All"
+					IsExpanded="True">
+                    <TreeViewItem.Header>
+                        <StackPanel>
+                            <Image
+								Source="Resources/Icons/TreeView/folder-horizontal.png" />
+                            <TextBlock
+								Text="All Downloads" />
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                    <TreeViewItem
+						Selected="DownloadList_Unfinished">
+                        <TreeViewItem.Header>
+                            <StackPanel>
+                                <Image
+									Source="Resources/Icons/TreeView/folder-horizontal-arrow.png" />
+                                <TextBlock
+									Text="Unfinished" />
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                    <TreeViewItem
+						Selected="DownloadList_Finished">
+                        <TreeViewItem.Header>
+                            <StackPanel>
+                                <Image
+									Source="Resources/Icons/TreeView/folder-horizontal-tick.png" />
+                                <TextBlock
+									Text="Finished" />
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                </TreeViewItem>
+                <TreeViewItem
+					Selected="DownloadList_Unfinished"
+					IsExpanded="True">
+                    <TreeViewItem.Header>
+                        <StackPanel>
+                            <Image
+								Source="Resources/Icons/TreeView/sticky-notes-stack.png" />
+                            <TextBlock
+								Text="Queues" />
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                    <TreeViewItem 
+						Selected="DownloadList_MainDownloadQueue"
+						IsSelected="True">
+                        <TreeViewItem.Header>
+                            <StackPanel>
+                                <Image
+									Source="Resources/Icons/TreeView/sticky-notes-stack.png" />
+                                <TextBlock
+									Text="Main download queue" />
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                </TreeViewItem>
+            </TreeView>
+        </ScrollViewer>
+        <GridSplitter
+			x:Name="GridSplitter"
+			Width="5"
+			Grid.Row="2"
+			Grid.Column="0"
+			HorizontalAlignment="Right" />
+        <ScrollViewer
+			Grid.Row="2"
+			Grid.Column="1"
+			HorizontalScrollBarVisibility="Auto"
+			VerticalScrollBarVisibility="Auto">
+			<ListView
+				x:Name="DownloadList"
+				util:GridViewSort.AutoSort="True"
+				util:GridViewSort.SortGlyphAscending="Resources/Sort Glyphs/up.png"
+				util:GridViewSort.SortGlyphDescending="Resources/Sort Glyphs/down.png"
+				SelectionChanged="DownloadList_SelectionChanged"
+				MouseDoubleClick="DownloadList_MouseDoubleClick">
+				<ListView.ContextMenu>
+					<ContextMenu>
+						<MenuItem
+							x:Name="Open_ContextMenuItem"
+							Header="_Open"
+							Click="Open_Click" />
+						<MenuItem 
+							x:Name="OpenWith_ContextMenuItem"
+							Header="_Open with..."
+							Click="OpenWith_Click"/>
+						<MenuItem 
+							x:Name="OpenContainingFolder_ContextMenuItem"
+							Header="_Open Containing Folder"
+							Click="OpenContainingFolder_Click"/>
+						<Separator />
+						<MenuItem
+							Header="_Move or Rename" />
+						<Separator />
+						<MenuItem
+							x:Name="ResumeSelectedDownloads_ContextMenuItem"
+							Header="_Resume Download" 
+							Click="ResumeSelectedDownloads_Click" />
+						<MenuItem
+							x:Name="StopSelectedDownloads_ContextMenuItem"
+							Header="_Stop Download" 
+							Click="StopSelectedDownloads_Click" />
+						<Separator />
+						<MenuItem
+							x:Name="DeleteSelectedDownloads_ContextMenuItem"
+							Header="_Remove"
+							Click="DeleteSelectedDownloads_Click" />
+						<Separator />
+						<MenuItem 
+							x:Name="OpenDownloadProperties_ContextMenuItem"
+							Header="_Properties"
+							Click="OpenDownloadProperties_Click"/>
+					</ContextMenu>
+				</ListView.ContextMenu>
+				<ListView.View>
+					<GridView>
+                        <GridView.ColumnHeaderContextMenu>
+                            <ContextMenu>
+                                <MenuItem 
+									Header="_Columns..." />
+                            </ContextMenu>
+                        </GridView.ColumnHeaderContextMenu>
+                        <GridViewColumn 
+							Header="Running"
+							DisplayMemberBinding="{Binding Running}" />
+                        <GridViewColumn 
+							Header="File Name"
+							DisplayMemberBinding="{Binding FileName}"
+							Width="{Binding Source={x:Static p:Settings.Default}, Path=FileNameColumnWidth, Mode=TwoWay}" />
+						<GridViewColumn 
+							Header="Size"
+							DisplayMemberBinding="{Binding SizePretty}"
+							Width="{Binding Source={x:Static p:Settings.Default}, Path=SizeColumnWidth, Mode=TwoWay}" />
+						<GridViewColumn 
+							Header="Time left"
+							DisplayMemberBinding="{Binding TimeLeft}"
+							Width="{Binding Source={x:Static p:Settings.Default}, Path=TimeLeftColumnWidth, Mode=TwoWay}" />
+						<GridViewColumn 
+							Header="Status"
+							DisplayMemberBinding="{Binding Status}"
+							Width="{Binding Source={x:Static p:Settings.Default}, Path=StatusColumnWidth, Mode=TwoWay}" />
+						<GridViewColumn 
+							Header="Transfer rate"
+							DisplayMemberBinding="{Binding TransferRate}"
+							Width="{Binding Source={x:Static p:Settings.Default}, Path=TransferRateColumnWidth, Mode=TwoWay}" />
+						<GridViewColumn
+							Header="Date Added"
+							DisplayMemberBinding="{Binding DateAdded, StringFormat='MMM dd HH:mm:ss yyyy'}"
+							Width="{Binding Source={x:Static p:Settings.Default}, Path=DateAddedColumnWidth , Mode=TwoWay}" />
+						<GridViewColumn 
+							Header="Last Try Date"
+							DisplayMemberBinding="{Binding LastTryDate, StringFormat='MMM dd HH:mm:ss yyyy'}"
+							Width="{Binding Source={x:Static p:Settings.Default}, Path=LastTryDateColumnWidth , Mode=TwoWay}" />
+						<GridViewColumn 
+							Header="Save To"
+							DisplayMemberBinding="{Binding SaveTo}"
+							Width="{Binding Source={x:Static p:Settings.Default}, Path=SaveToColumnWidth , Mode=TwoWay}" />
+						<GridViewColumn 
+							Header="Q"
+							DisplayMemberBinding="{Binding Q}"
+							Width="{Binding Source={x:Static p:Settings.Default}, Path=QColumnWidth , Mode=TwoWay}" />
+						<GridViewColumn	
+							Header="Description"
+							DisplayMemberBinding="{Binding Description}"
+							Width="{Binding Source={x:Static p:Settings.Default}, Path=DescriptionColumnWidth , Mode=TwoWay}" />
+					</GridView>
+				</ListView.View>
+			</ListView>
+        </ScrollViewer>
+        <tb:TaskbarIcon
+            x:Name="TrayIcon"
+            IconSource="Resources/Icons/Mackerel.ico"
+            ToolTipText="Mackerel Download Manager"
+            LeftClickCommand="{x:Static local:MainWindow.TrayIconClick}"
+            DoubleClickCommand="{x:Static local:MainWindow.TrayIconClick}">
+            <tb:TaskbarIcon.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Restore"
+                              Click="ShowApplication"/>
+                    <Separator />
+                    <MenuItem Header="Exit" 
+                              Click="ExitApplication"/>
+                </ContextMenu>
+            </tb:TaskbarIcon.ContextMenu>
+        </tb:TaskbarIcon>
+    </Grid>
+</Window>

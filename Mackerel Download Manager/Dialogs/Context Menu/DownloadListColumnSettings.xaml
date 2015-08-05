@@ -1,0 +1,9 @@
+﻿<Window x:Class="Mackerel_Download_Manager.Dialogs.Context_Menu.DownloadListColumnSettings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="DownloadListColumnSettings" Height="300" Width="300"
+		WindowStartupLocation="CenterOwner">
+    <Grid>
+        
+    </Grid>
+</Window>

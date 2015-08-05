@@ -1,0 +1,158 @@
+﻿<Window x:Class="Mackerel_Download_Manager.Dialogs.DownloadFileInfo"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:p="clr-namespace:Mackerel_Download_Manager.Properties"
+        Title="Download File Info" Height="200" Width="586"
+		ResizeMode="CanMinimize"
+		Loaded="WhenWindowIsLoaded"
+		WindowStartupLocation="CenterScreen">
+	<Grid
+		Background="#F0F0F0">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition
+				Width="470" />
+			<ColumnDefinition
+				Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid
+			Margin="0,0,0,0"
+			VerticalAlignment="Top"
+			HorizontalAlignment="Right"
+			Grid.Row="0"
+			Grid.Column="0"
+			Height="156"
+			Width="436">
+			<Grid.RowDefinitions>
+				<RowDefinition
+					Height="1.13888590748094*" />
+				<RowDefinition
+					Height="0.807368279720116*" />
+				<RowDefinition
+					Height="0.898091596994147*" />
+				<RowDefinition
+					Height="0.912980500268459*" />
+				<RowDefinition
+					Height="1.04783370899073*" />
+			</Grid.RowDefinitions>
+			<StackPanel
+				Grid.Row="0"
+				Height="25"
+				Orientation="Horizontal"
+				HorizontalAlignment="Right"
+				Margin="0 7 0 5">
+				<Label
+					Content="URL"
+					Width="Auto"
+					VerticalAlignment="Top"
+					HorizontalAlignment="Left" />
+				<Border
+					BorderThickness="0 0.7 0 0"
+					BorderBrush="DimGray">
+					<Border
+						BorderThickness="1.1"
+						BorderBrush="White">
+						<TextBox
+							x:Name="LinkBox"
+							Grid.Row="0"
+							IsReadOnly="True"
+							Background="#F0F0F0"
+							IsReadOnlyCaretVisible="True"
+							BorderThickness="0"
+							Width="362.5" />
+					</Border>
+				</Border>
+			</StackPanel>
+			<StackPanel
+				Grid.Row="1"
+				Height="25"
+				Orientation="Horizontal"
+				HorizontalAlignment="Right">
+				<Label
+					Content="Save As"
+					Width="Auto"
+					VerticalAlignment="Top"
+					HorizontalAlignment="Left" />
+				<ComboBox
+					x:Name="SaveLocationComboBox"
+					IsEditable="True"
+					Width="333"></ComboBox>
+				<Button
+					x:Name="SaveLocationButton"
+					Content="..."
+					Width="26"
+					Margin="7 0 0 0"
+					Click="SaveLocationButton_Click" />
+			</StackPanel>
+			<CheckBox
+				x:Name="RememberPath"
+				Content="Remember this path"
+				Grid.Row="2"
+				Width="366"
+				Height="Auto"
+				IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=RememberPath, Mode=TwoWay}"
+				VerticalAlignment="Center"
+				HorizontalAlignment="Right" />
+			<StackPanel
+				Grid.Row="3"
+				Height="26"
+				Orientation="Horizontal"
+				HorizontalAlignment="Right">
+				<Label
+					Content="Description"
+					Width="Auto"
+					VerticalAlignment="Top"
+					HorizontalAlignment="Left" />
+				<TextBox
+					x:Name="Description"
+					Width="366" />
+			</StackPanel>
+			<StackPanel
+				Orientation="Horizontal"
+				Width="366"
+				Height="25"
+				Grid.Column="0"
+				Grid.Row="4"
+				HorizontalAlignment="Right"
+				VerticalAlignment="Center"
+				Margin="0,7,0,2">
+				<Button
+					x:Name="btnDownloadLater"
+					Width="115"
+					Margin="0 0 10 0"
+					Click="btnDownloadLater_Click">Download Later</Button>
+				<Button
+					x:Name="btnDownload"
+					Width="115"
+					Margin="0 0 0 0"
+					IsDefault="True"
+					Click="btnDownload_Click">Download</Button>
+				<Button
+					x:Name="btnCancel"
+					Width="115"
+					Margin="10 0 0 0"
+					IsCancel="True"
+					Click="btnCancel_Click">Cancel</Button>
+			</StackPanel>
+		</Grid>
+		<StackPanel
+			Orientation="Vertical"
+			HorizontalAlignment="Center"
+			VerticalAlignment="Center"
+			Grid.ColumnSpan="2"
+			Grid.Column="1">
+			<Image
+				x:Name="FileExtIcon"
+				Width="32"
+				Height="32"
+				Stretch="None" />
+			<!-- The Content property of this label should be left as it is because the WPF window doesn't allocate any space
+			 for the element until it is assigned a Content property with or without a value. This way, the space
+			 for this element is pre-allocated before the BackgroundWorker1 even begins working -->
+			<Label
+				x:Name="FileSizeLabel"
+				Content=""
+				HorizontalAlignment="Center"
+				VerticalAlignment="Center" />
+		</StackPanel>
+	</Grid>
+</Window>

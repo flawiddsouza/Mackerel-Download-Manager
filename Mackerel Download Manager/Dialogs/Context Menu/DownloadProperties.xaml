@@ -1,0 +1,196 @@
+﻿<Window x:Class="Mackerel_Download_Manager.Dialogs.Context_Menu.DownloadProperties"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="File Properties" SizeToContent="WidthAndHeight"
+		Background="#F0F0F0"
+		ResizeMode="NoResize"
+		WindowStartupLocation="CenterOwner">
+	<Grid 
+		Margin="10">
+		<StackPanel Orientation="Vertical">
+			<StackPanel.Resources>
+				<Style TargetType="TextBlock">
+					<Setter Property="VerticalAlignment" Value="Center" />
+				</Style>
+				<Style TargetType="Label">
+					<Setter Property="HorizontalAlignment" Value="Left" />
+					<Setter Property="Grid.Column"	Value="0" />
+				</Style>
+			</StackPanel.Resources>
+			<Grid
+				Margin="0 0 0 5">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="75" /> <!-- had to decrease it by 2 pixels because some weird extra margin was being added to the FileName textbox -->
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<Image
+					x:Name="FileIcon"
+					Stretch="None"
+					HorizontalAlignment="Left"
+					Grid.Column="0" />
+				<!-- had to add 2 pixels to the width of the textbox because we decreased the first column width by 2px -->
+				<TextBox 
+					x:Name="FileName"
+					Width="380" 
+					Height="Auto"
+					IsReadOnly="True"
+					BorderThickness="0"
+					Background="Transparent"
+					Padding="0"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Center"
+					Grid.Column="1" /><!-- this is a read-only textbox instead of a textblock, enabling the user to copy the filename easily -->
+			</Grid>
+			<Separator />
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="77" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<Label>Type:</Label>
+				<TextBlock
+					x:Name="FileType"
+					Grid.Column="1" />
+			</Grid>
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="77" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<Label>Status:</Label>
+				<TextBlock
+					x:Name="Status"
+					Grid.Column="1" />
+			</Grid>
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="77" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<Label>Size:</Label>
+				<TextBlock
+					x:Name="Size"
+					Grid.Column="1" />
+			</Grid>
+			<Grid
+				Margin="0 2 0 5">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="77" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<Label>Save To:</Label>
+				<StackPanel 
+					Orientation="Horizontal" 
+					Grid.Column="1"
+					FocusManager.FocusedElement="{Binding ElementName=SaveTo_txtBox}">
+					<TextBox
+						x:Name="SaveTo_txtBox"
+						IsReadOnly="True"
+						IsReadOnlyCaretVisible="True"
+						Background="#F0F0F0"
+						BorderBrush="DarkGray"
+						Width="294"
+						Height="22"
+						Margin="0 0 10 0"/>
+					<Button
+						x:Name="SaveTo_button"
+						Content="Browse..."
+						Width="74"
+						Height="22" 
+						Click="SaveTo_button_Click" />
+				</StackPanel>
+			</Grid>
+			<Grid
+				Margin="0 0 0 5">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="77" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<Label>Address:</Label>
+				<TextBox
+					x:Name="Address"
+					Grid.Column="1"
+					Width="378"
+					Height="22" />
+			</Grid>
+			<Grid
+				Margin="0 0 0 5">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="77" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<Label>Description:</Label>
+				<TextBox
+					x:Name="Description"
+					Grid.Column="1"
+					Width="378"
+					Height="22" />
+			</Grid>
+			<Separator />
+			<StackPanel
+				Orientation="Vertical"
+				Margin="0 5 0 5">
+				<TextBlock>This file was obtained from this web page:</TextBlock>
+				<TextBlock>
+					<Hyperlink
+						x:Name="ObtainedFromLink"
+						Command="" 
+						Foreground="#0000FF">
+						<TextBlock 
+							x:Name="ObtainedFromText" />
+					</Hyperlink>
+				</TextBlock>
+			</StackPanel>
+			<Separator />
+			<StackPanel
+				Orientation="Horizontal"
+				Margin="0 5 0 5"
+				HorizontalAlignment="Center"
+				VerticalAlignment="Center">
+				<StackPanel
+					Orientation="Horizontal"
+					Margin="0 0 15 0">
+					<Label>Login</Label>
+					<TextBox
+						x:Name="authUser"
+						Width="150"
+						Height="22" />
+				</StackPanel>
+				<StackPanel
+					Orientation="Horizontal">
+					<Label>Password</Label>
+					<PasswordBox
+						x:Name="authPass"
+						Width="150"
+						Height="22" />
+				</StackPanel>
+			</StackPanel>
+			<Separator />
+			<Grid
+				Margin="0 10 0 0">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="322" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<Button
+					x:Name="btnOpen"
+					Grid.Column="0"
+					IsEnabled="False"
+					Width="74"
+					Height="22"
+					HorizontalAlignment="Right"
+					Content="Open" 
+					Click="btnOpen_Click"/>
+				<Button
+					x:Name="btnOK"
+					Grid.Column="1"
+					Width="74"
+					Height="22"
+					IsDefault="True"
+					HorizontalAlignment="Right"
+					Content="OK" 
+					Click="btnOK_Click"/>
+			</Grid>
+		</StackPanel>
+	</Grid>
+</Window>

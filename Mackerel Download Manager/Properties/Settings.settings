@@ -1,0 +1,48 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Mackerel_Download_Manager.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="FileNameColumnWidth" Provider="Mackerel_Download_Manager.Settings.PortableSettingsProvider" Roaming="true" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">282</Value>
+    </Setting>
+    <Setting Name="SizeColumnWidth" Provider="Mackerel_Download_Manager.Settings.PortableSettingsProvider" Roaming="true" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">103</Value>
+    </Setting>
+    <Setting Name="TimeLeftColumnWidth" Provider="Mackerel_Download_Manager.Settings.PortableSettingsProvider" Roaming="true" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">96</Value>
+    </Setting>
+    <Setting Name="TransferRateColumnWidth" Provider="Mackerel_Download_Manager.Settings.PortableSettingsProvider" Roaming="true" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">96</Value>
+    </Setting>
+    <Setting Name="DateAddedColumnWidth" Provider="Mackerel_Download_Manager.Settings.PortableSettingsProvider" Roaming="true" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">132</Value>
+    </Setting>
+    <Setting Name="LastTryDateColumnWidth" Provider="Mackerel_Download_Manager.Settings.PortableSettingsProvider" Roaming="true" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">132</Value>
+    </Setting>
+    <Setting Name="SaveToColumnWidth" Provider="Mackerel_Download_Manager.Settings.PortableSettingsProvider" Roaming="true" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">380</Value>
+    </Setting>
+    <Setting Name="QColumnWidth" Provider="Mackerel_Download_Manager.Settings.PortableSettingsProvider" Roaming="true" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">22</Value>
+    </Setting>
+    <Setting Name="DescriptionColumnWidth" Provider="Mackerel_Download_Manager.Settings.PortableSettingsProvider" Roaming="true" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">261</Value>
+    </Setting>
+    <Setting Name="DownloadDirectory" Provider="Mackerel_Download_Manager.Settings.PortableSettingsProvider" Roaming="true" Type="System.String" Scope="User">
+      <Value Profile="(Default)">%USERPROFILE%\Downloads\</Value>
+    </Setting>
+    <Setting Name="StatusColumnWidth" Provider="Mackerel_Download_Manager.Settings.PortableSettingsProvider" Roaming="true" Type="System.String" Scope="User">
+      <Value Profile="(Default)">99</Value>
+    </Setting>
+    <Setting Name="RememberPath" Provider="Mackerel_Download_Manager.Settings.PortableSettingsProvider" Roaming="true" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="DisplayDialogforIncompleteDeletions" Provider="Mackerel_Download_Manager.Settings.PortableSettingsProvider" Roaming="true" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="DisplayDialogforCompletedDeletions" Provider="Mackerel_Download_Manager.Settings.PortableSettingsProvider" Roaming="true" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

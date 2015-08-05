@@ -1,0 +1,40 @@
+﻿<Window x:Class="Mackerel_Download_Manager.Dialogs.Warnings.DuplicateDownloadLink"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Duplicate download link" Height="229" Width="435"
+		ResizeMode="CanMinimize"
+		WindowStartupLocation="CenterOwner">
+    <Grid Margin="10">
+		<StackPanel Orientation="Vertical">
+			<TextBox
+				x:Name="DownloadLink" 
+				IsReadOnly="True"/>
+			<TextBlock
+				Margin="0 10 0 10"
+				TextWrapping="Wrap">The file you want to download already exists in your download list. You're free to choose the following options, or press Cancel to skip the download of this file</TextBlock>
+			<RadioButton
+				x:Name="Option1"
+				IsChecked="True"
+				Content="Add the duplicate with a numbered file name"
+				Margin="0 0 0 7"/>
+			<RadioButton
+				x:Name="Option2"
+				Content="Add the dupicate and replace the existing file"/>
+			<StackPanel 
+				Orientation="Horizontal"
+				HorizontalAlignment="Center"
+				Margin="0 20 0 0" >
+				<Button
+					Content="OK"
+					IsDefault="True" 
+					Width="80"
+					Margin="0 0 10 0" Click="btnOK_Click"/>
+				<Button
+					Content="Cancel"
+					IsCancel="True"
+					Width="80" Click="btnCancel_Click"/>
+			</StackPanel>
+		</StackPanel>
+        
+    </Grid>
+</Window>

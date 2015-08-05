@@ -1,0 +1,88 @@
+﻿<Window x:Class="Mackerel_Download_Manager.Dialogs.AddDownload"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:main="clr-namespace:Mackerel_Download_Manager.Dialogs"
+        Title="Enter new address to download" Height="133" Width="576"
+		WindowStartupLocation="CenterScreen"
+		ResizeMode="NoResize"
+		Topmost = "True"
+		Background="#F0F0F0">
+	<Window.Resources>
+		<main:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+	</Window.Resources>
+	<Grid 
+		Margin="9 11 12 7">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition
+				Width="452" />
+			<ColumnDefinition
+				Width="*" />
+		</Grid.ColumnDefinitions>
+		<StackPanel
+			Grid.Column="0"
+			Orientation="Vertical">
+			<StackPanel
+				Orientation="Horizontal"
+				FocusManager.FocusedElement="{Binding ElementName=DownloadLinkComboBox}">
+				<Label
+					Content="Address" />
+				<ComboBox
+					x:Name="DownloadLinkComboBox"
+					IsEditable="True"
+					Height="22"
+					Width="399"/>
+			</StackPanel>
+			<GroupBox
+				Margin="0 2 0 0">
+				<GroupBox.Header>
+					<CheckBox
+						x:Name="UseAuth"
+						Content="Use authentication" />
+				</GroupBox.Header>
+				<StackPanel 
+					Orientation="Horizontal"
+					IsEnabled="{Binding IsChecked, ElementName=UseAuth, Converter={StaticResource InverseBooleanConverter}, Mode=OneWay}">
+					<StackPanel Orientation="Horizontal">
+						<Label
+							Content="Login" />
+						<TextBox
+							x:Name="AuthUser"
+							Padding="0"
+							Height="22"
+							Width="120" />
+					</StackPanel>
+					<StackPanel 
+						Orientation="Horizontal"
+						HorizontalAlignment="Right">
+						<Label
+							Content="Password" />
+						<PasswordBox
+							x:Name="AuthPass"
+							Height="22"
+							Width="120" />
+					</StackPanel>
+				</StackPanel>
+			</GroupBox>
+		</StackPanel>
+		<StackPanel
+			VerticalAlignment="Top"
+			HorizontalAlignment="Right"
+			Grid.Column="1">
+			<Button
+				x:Name="OK"
+				Content="OK"
+				Margin="0 2 0 10"
+				Width="74"
+				Height="22"
+				IsDefault="True"
+				Click="OK_Click" />
+			<Button
+				x:Name="Cancel"
+				Content="Cancel"
+				Width="74"
+				Height="22"
+				IsCancel="True"
+				Click="Cancel_Click" />
+		</StackPanel>
+	</Grid>
+</Window>
