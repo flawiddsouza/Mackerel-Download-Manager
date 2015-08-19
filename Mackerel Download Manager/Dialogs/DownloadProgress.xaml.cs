@@ -51,7 +51,7 @@ namespace Mackerel_Download_Manager.Dialogs
                 {
                     currentDownload.StopDownload();
                     downloadData.TransferRate = null;
-                    this.Close();
+                    Close();
                 }
             };
         }
@@ -61,7 +61,7 @@ namespace Mackerel_Download_Manager.Dialogs
             MessageBox.Show(e.ErrorMessage + "\nPlease check your internet connection!", downloadData.FileName);
             Dispatcher.Invoke(() =>
             {
-                this.Close(); // HACK this only works once, the second time the messagebox is displayed it fails to close the window
+                Close(); // HACK this only works once, the second time the messagebox is displayed it fails to close the window
             });
         }
 
@@ -152,6 +152,7 @@ namespace Mackerel_Download_Manager.Dialogs
 		private void Cancel_Click(object sender, RoutedEventArgs e)
 		{
             currentDownload.StopDownload();
+            downloadData.TransferRate = null; // not working
             downloadData.Running = false;
 			this.Close();
 		}
@@ -159,7 +160,7 @@ namespace Mackerel_Download_Manager.Dialogs
         protected override void OnClosing(CancelEventArgs e)
         {
             currentDownload.StopDownload();
-            downloadData.TransferRate = null;
+            downloadData.TransferRate = null; // not working
             downloadData.Running = false;
             base.OnClosing(e);
         }

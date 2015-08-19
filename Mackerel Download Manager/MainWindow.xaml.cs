@@ -1,11 +1,10 @@
-﻿using Hardcodet.Wpf.TaskbarNotification;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using Wpf.Util;
 
@@ -162,8 +161,8 @@ namespace Mackerel_Download_Manager
 			// enable disable context menu items, based on whether the selected download is running or not
 			for (int i = 0; i < SelectedDownloads.Count; i++)
 			{
-				var selectedItem = (dynamic)DownloadList.SelectedItems[i];
-				if (Downloads.DownloadEntries.Where(download => download.DownloadID == selectedItem.DownloadID).Where(download => download.Running == true).Any())
+				var selectedItem = (DownloadEntry)DownloadList.SelectedItems[i];
+				if (selectedItem.Running)
 				{
 					ResumeSelectedDownloads.IsEnabled = false;
 					DeleteSelectedDownloads.IsEnabled = false;
@@ -197,10 +196,10 @@ namespace Mackerel_Download_Manager
 			bool running = false;
 			foreach (DownloadEntry item in DownloadList.Items)
 			{
-				if (item.Running == true)
+				if (item.Running)
 					running = true;
 			}
-			if (running == true)
+			if (running)
 			{
 				StopAllDownloads.IsEnabled = true;
 				StopAllDownloads_MenuItem.IsEnabled = true;
@@ -211,11 +210,66 @@ namespace Mackerel_Download_Manager
 				StopAllDownloads_MenuItem.IsEnabled = false;
 			}
 
+            Downloads.DownloadEntries.ListChanged += delegate
+            {
+                // enable disable context menu items, based on whether the selected download is running or not
+                for (int i = 0; i < SelectedDownloads.Count; i++)
+                {
+                    var selectedItem = (DownloadEntry)DownloadList.SelectedItems[i];
+                    if (selectedItem.Running)
+                    {
+                        ResumeSelectedDownloads.IsEnabled = false;
+                        DeleteSelectedDownloads.IsEnabled = false;
+                        StopSelectedDownloads.IsEnabled = true;
+
+                        ResumeSelectedDownloads_MenuItem.IsEnabled = false;
+                        DeleteSelectedDownloads_MenuItem.IsEnabled = false;
+                        StopSelectedDownloads_MenuItem.IsEnabled = true;
+
+                        ResumeSelectedDownloads_ContextMenuItem.IsEnabled = false;
+                        DeleteSelectedDownloads_ContextMenuItem.IsEnabled = false;
+                        StopSelectedDownloads_ContextMenuItem.IsEnabled = true;
+                    }
+                    else // when the download is not running
+                    {
+                        ResumeSelectedDownloads.IsEnabled = true;
+                        DeleteSelectedDownloads.IsEnabled = true;
+                        StopSelectedDownloads.IsEnabled = false;
+
+                        ResumeSelectedDownloads_MenuItem.IsEnabled = true;
+                        DeleteSelectedDownloads_MenuItem.IsEnabled = true;
+                        StopSelectedDownloads_MenuItem.IsEnabled = false;
+
+                        ResumeSelectedDownloads_ContextMenuItem.IsEnabled = true;
+                        DeleteSelectedDownloads_ContextMenuItem.IsEnabled = true;
+                        StopSelectedDownloads_ContextMenuItem.IsEnabled = false;
+                    }
+                }
+
+                // enable and disable the 'stop all downloads' option by checking if any downloads are running or not
+                running = false;
+                foreach (DownloadEntry item in DownloadList.Items)
+                {
+                    if (item.Running)
+                        running = true;
+                }
+                if (running)
+                {
+                    StopAllDownloads.IsEnabled = true;
+                    StopAllDownloads_MenuItem.IsEnabled = true;
+                }
+                else
+                {
+                    StopAllDownloads.IsEnabled = false;
+                    StopAllDownloads_MenuItem.IsEnabled = false;
+                }
+            };
+
 			// disable context menu items, based on whether the selected download is completed or not
 			for (int i = 0; i < SelectedDownloads.Count; i++)
 			{
-				var selectedItem = (dynamic)DownloadList.SelectedItems[i];
-				if (Downloads.DownloadEntries.Where(download => download.DownloadID == selectedItem.DownloadID).Where(download => download.Status == "Complete").Any())
+				var selectedItem = (DownloadEntry)DownloadList.SelectedItems[i];
+				if (selectedItem.Status == "Complete")
 				{
 					ResumeSelectedDownloads.IsEnabled = false;
 					DeleteSelectedDownloads.IsEnabled = true;
@@ -390,23 +444,58 @@ namespace Mackerel_Download_Manager
 
 		}
 
+        private void ShowApplication()
+        {
+            if (WindowState == WindowState.Minimized)
+            {
+                WindowState = WindowState.Normal;
+            }
+            else if (Visibility == Visibility.Collapsed)
+            {
+                Visibility = Visibility.Visible;
+            }
+            else if (Visibility == Visibility.Visible || WindowState == WindowState.Normal)
+            {
+                Topmost = true; // bring to top
+                Topmost = false; // reset property        
+            }
+        }
+
         private void TrayIcon_Click(object sender, RoutedEventArgs e)
         {
-            Show();
+            ShowApplication();
         }
 
         private void ShowApplication(object sender, RoutedEventArgs e)
         {
-            Show();
+            ShowApplication();
         }
 
         // Save any changes made by the user to the Mackerel.settings file
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             Properties.Settings.Default.Save();
-            //base.OnClosing(e);
             e.Cancel = true;
-            Hide();
+            this.Visibility = Visibility.Collapsed;
+        }
+
+
+        // Methods related to controlling the visible behavior of the single instance of the application
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            HwndSource source = PresentationSource.FromVisual(this) as HwndSource;
+            source.AddHook(WndProc);
+        }
+
+        private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            if (msg == NativeMethods.WM_SHOWME)
+            {
+                ShowApplication();
+            }
+
+            return IntPtr.Zero;
         }
     }
 }

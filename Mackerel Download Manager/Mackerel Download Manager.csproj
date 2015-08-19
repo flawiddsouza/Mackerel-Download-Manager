@@ -84,10 +84,10 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
+    <Page Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </ApplicationDefinition>
+    </Page>
     <Page Include="Dialogs\AddDownload.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -161,6 +161,7 @@
     </Compile>
     <Compile Include="Libraries\CustomBindingList.cs" />
     <Compile Include="Libraries\Download.cs" />
+    <Compile Include="Libraries\NativeMethods.cs" />
     <Compile Include="Models\Downloads.cs" />
     <Compile Include="Libraries\Helper.cs" />
     <Compile Include="Libraries\IconTools.cs" />

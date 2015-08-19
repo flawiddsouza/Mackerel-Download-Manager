@@ -49,10 +49,16 @@ namespace Mackerel_Download_Manager
 			stop = false; // always set this bool to false, everytime this method is called
 
 			var fileInfo = new FileInfo(Path);
+
 			long existingLength = 0;
             if (fileInfo.Exists)
             {
                 existingLength = fileInfo.Length;
+            }
+
+            while (IsFileLocked(fileInfo))
+            {
+                Thread.Sleep(1000);
             }
 
 			var request = (HttpWebRequest)HttpWebRequest.Create(DownloadLink);
@@ -155,7 +161,33 @@ namespace Mackerel_Download_Manager
 			}
 		}
 
-		protected virtual void OnResumabilityChanged(DownloadStatusChangedEventArgs e)
+        protected virtual bool IsFileLocked(FileInfo file)
+        {
+            FileStream stream = null;
+
+            try
+            {
+                stream = file.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+            }
+            catch (IOException)
+            {
+                //the file is unavailable because it is:
+                //still being written to
+                //or being processed by another thread
+                //or does not exist (has already been processed)
+                return true;
+            }
+            finally
+            {
+                if (stream != null)
+                    stream.Close();
+            }
+
+            //file is not locked
+            return false;
+        }
+
+        protected virtual void OnResumabilityChanged(DownloadStatusChangedEventArgs e)
 		{
 			var handler = ResumablityChanged;
 			if (handler != null)
