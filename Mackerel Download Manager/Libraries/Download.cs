@@ -56,10 +56,11 @@ namespace Mackerel_Download_Manager
                 existingLength = fileInfo.Length;
             }
 
-            while (IsFileLocked(fileInfo))
-            {
-                Thread.Sleep(1000);
-            }
+            // TODO Needs to be fixed, doesn't work as it should, problem: prevents the download from starting
+            //while (IsFileLocked(fileInfo))
+            //{
+            //    Thread.Sleep(1000);
+            //}
 
 			var request = (HttpWebRequest)HttpWebRequest.Create(DownloadLink);
 			request.Proxy = null;
