@@ -25,20 +25,6 @@ namespace Mackerel_Download_Manager
                 stop = value;
             }
         }
-        private bool paused = false;
-        public bool Paused
-        {
-            get
-            {
-                return paused;
-            }
-            set
-            {
-                paused = value;
-            }
-        }
-
-        SemaphoreSlim pauseLock = new SemaphoreSlim(1);
 
 		string filename; // TODO: remove this variable and its dependencies
 
@@ -56,11 +42,10 @@ namespace Mackerel_Download_Manager
                 existingLength = fileInfo.Length;
             }
 
-            // TODO Needs to be fixed, doesn't work as it should, problem: prevents the download from starting
-            //while (IsFileLocked(fileInfo))
-            //{
-            //    Thread.Sleep(1000);
-            //}
+            while (IsFileLocked(fileInfo))
+            {
+                Thread.Sleep(100);
+            }
 
 			var request = (HttpWebRequest)HttpWebRequest.Create(DownloadLink);
 			request.Proxy = null;
@@ -100,9 +85,6 @@ namespace Mackerel_Download_Manager
 
                                 float currentSpeed = totalReceived / (float)sw.Elapsed.TotalSeconds;
                                 OnProgressChanged(new DownloadProgressChangedEventArgs(totalReceived, fileSize, (long)currentSpeed));
-
-                                pauseLock.Wait();
-                                pauseLock.Release();
                             }
                             sw.Stop();
                         }
@@ -119,34 +101,13 @@ namespace Mackerel_Download_Manager
 			}
             catch (IOException e)
             {
-                OnError(new DownloadStatusChangedEventArgs(e.Message));
+                //OnError(new DownloadStatusChangedEventArgs(e.Message)); Causes problems, and not necessary since there's IsFileLocked check before the download
             }
-		}
-
-		public void Pause()
-		{
-			if (!paused)
-			{
-				paused = true;
-				// Note this cannot block for more than a moment
-				// since the download thread doesn't keep the lock held
-				pauseLock.Wait();
-			}
-		}
-
-		public void Resume()
-		{
-			if (paused)
-			{
-				paused = false;
-				pauseLock.Release();
-			}
 		}
 
 		public void StopDownload()
 		{
 			stop = true;
-			this.Resume();  // stop waiting on lock if needed
 		}
 
 		public bool ResumeUnsupportedWarning()

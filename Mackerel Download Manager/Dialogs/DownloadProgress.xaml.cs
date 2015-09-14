@@ -17,6 +17,8 @@ namespace Mackerel_Download_Manager.Dialogs
 
         DownloadEntry downloadData;
 
+        private bool paused;
+
         public DownloadProgress(string currentDownloadID)
 		{
 			InitializeComponent();
@@ -130,24 +132,25 @@ namespace Mackerel_Download_Manager.Dialogs
             });
 		}
 
-		private void Pause_Click(object sender, RoutedEventArgs e)
-		{
-            if (!currentDownload.Paused)
+        private void Pause_Click(object sender, RoutedEventArgs e)
+        {
+            if(!paused)
             {
-                currentDownload.Pause();
+                currentDownload.StopDownload();
                 TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Paused;
                 Status.Text = "Paused";
                 Pause.Content = "Resume";
+                paused = true;
             }
             else
             {
-
-                currentDownload.Resume();
+                Mackerel.StartDownloadResumeStyle(downloadData.DownloadID);
                 TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
                 Status.Text = "Receiving data...";
                 Pause.Content = "Pause";
+                paused = false;
             }
-		}
+        }
 
 		private void Cancel_Click(object sender, RoutedEventArgs e)
 		{

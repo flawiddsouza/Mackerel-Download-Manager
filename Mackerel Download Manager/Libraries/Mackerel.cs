@@ -46,6 +46,12 @@ namespace Mackerel_Download_Manager
             window.Show();
         }
 
+        public static void StartDownloadResumeStyle(string DownloadID)  // belongs -> pause implementation
+        {
+            var itemToResume = Downloads.DownloadEntries.Where(download => download.DownloadID == DownloadID).FirstOrDefault();
+            Task.Factory.StartNew(() => currentDownloads[itemToResume.DownloadID].DownloadFile(itemToResume.DownloadLink, itemToResume.SaveTo));
+        }
+
 		public static void StopDownload(string[] DownloadIDs)
 		{
 			foreach (var DownloadID in DownloadIDs)
